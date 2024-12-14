@@ -40,8 +40,8 @@ A cross-platform translation software based on Electron and NLLB-200.
 
 1. Clone repository
 ```bash
-git clone https://github.com/yourusername/translator_electron.git
-cd translator_electron
+git clone https://github.com/Ausdatascience/Ausdata_Translator.git
+cd /Ausdata_Translator
 ```
 
 2. Install Python dependencies
