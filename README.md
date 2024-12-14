@@ -121,7 +121,7 @@ npm start
 
 1. 克隆仓库
 ```bash
-git clone https://github.com/yourusername/translator_electron.git
+git clone https://github.com/Ausdatascience/Ausdata_Translator.git
 cd translator_electron
 ```
 
