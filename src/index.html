@@ -66,8 +66,24 @@
             </div>
             <div class="sidebar-footer">
                 <div class="sidebar-message-box">
-                    <textarea class="sidebar-message" readonly></textarea>
-                    <textarea id="gpuStatus" class="gpu-status" readonly></textarea>
+                    <div class="message-container">
+                        <textarea class="sidebar-message" readonly></textarea>
+                        <button class="copy-message-btn" title="复制消息">
+                            <svg width="14" height="14" viewBox="0 0 14 14">
+                                <rect x="3" y="3" width="6" height="6" stroke="currentColor" fill="none"/>
+                                <path d="M5 5H11V11H5" stroke="currentColor" fill="none"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="message-container">
+                        <textarea id="gpuStatus" class="gpu-status" readonly></textarea>
+                        <button class="copy-gpu-btn" title="复制GPU状态">
+                            <svg width="14" height="14" viewBox="0 0 14 14">
+                                <rect x="3" y="3" width="6" height="6" stroke="currentColor" fill="none"/>
+                                <path d="M5 5H11V11H5" stroke="currentColor" fill="none"/>
+                            </svg>
+                        </button>
+                    </div>
                 </div>
             </div>
             <div class="sidebar-resizer"></div>
@@ -241,7 +257,7 @@
                 </div>
                 
                 <div class="settings-group">
-                    <h3>硬件设置</h3>
+                    <h3>���件设置</h3>
                     <div class="hardware-settings">
                         <div class="hardware-options">
                             <label class="radio-label">
@@ -597,6 +613,80 @@
 
         [data-theme="dark"] {
             --primary-color: #8ab4f8;  /* 深色主题下的蓝色 */
+        }
+
+        .message-container {
+            position: relative;
+            width: 100%;
+        }
+        
+        .copy-message-btn,
+        .copy-gpu-btn {
+            position: absolute;
+            right: 4px;
+            top: 4px;
+            padding: 4px;
+            background: var(--bg-secondary);
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+        
+        .message-container:hover .copy-message-btn,
+        .message-container:hover .copy-gpu-btn {
+            opacity: 1;
+        }
+        
+        .copy-message-btn:hover,
+        .copy-gpu-btn:hover {
+            background: var(--bg-hover);
+        }
+        
+        .copy-message-btn svg,
+        .copy-gpu-btn svg {
+            display: block;
+            stroke: currentColor;
+            stroke-width: 1.2;
+        }
+
+        .sidebar-message-box {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            width: 100%;
+            height: 100%;  /* 确保消息框占满sidebar-footer的高度 */
+        }
+
+        .message-container {
+            position: relative;
+            width: 100%;
+            flex: 1;  /* 让两个消息容器平均分配空间 */
+            min-height: 80px;  /* 设置最小高度 */
+        }
+
+        .sidebar-message,
+        .gpu-status {
+            width: 100%;
+            height: 100%;  /* 让textarea填满container */
+            resize: none;
+            padding: 8px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            font-size: 12px;
+            line-height: 1.4;
+        }
+
+        /* 确保第一个消息框占据更多空间 */
+        .message-container:first-child {
+            flex: 2;  /* 让第一个消息框占据更多空间 */
+        }
+
+        .message-container:last-child {
+            flex: 1;  /* GPU状态框占据较少空间 */
         }
     </style>
 </body>

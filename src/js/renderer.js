@@ -493,11 +493,39 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             } catch (error) {
                 console.error('Error testing model:', error);
-                infoElement.innerHTML = '<div class="model-error">测试失败: ' + error.message + '</div>';
+                infoElement.innerHTML = '<div class="model-error">测试��败: ' + error.message + '</div>';
             }
         });
     } else {
         console.error('Test model button not found');
     }
+
+    // 添加复制功能
+    document.querySelector('.copy-message-btn').addEventListener('click', () => {
+        const messageText = document.querySelector('.sidebar-message').value;
+        if (messageText) {
+            navigator.clipboard.writeText(messageText)
+                .then(() => {
+                    // 可以添加一个复制成功的提示
+                    console.log('消息已复制');
+                })
+                .catch(err => {
+                    console.error('复制失败:', err);
+                });
+        }
+    });
+
+    document.querySelector('.copy-gpu-btn').addEventListener('click', () => {
+        const gpuText = document.getElementById('gpuStatus').value;
+        if (gpuText) {
+            navigator.clipboard.writeText(gpuText)
+                .then(() => {
+                    console.log('GPU状态已复制');
+                })
+                .catch(err => {
+                    console.error('复制失败:', err);
+                });
+        }
+    });
 })
  
