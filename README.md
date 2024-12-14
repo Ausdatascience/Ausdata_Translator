@@ -36,14 +36,6 @@ A cross-platform translation software based on Electron and NLLB-200.
 - Node.js 14 or higher
 - (Optional) NVIDIA GPU with CUDA support
 
-## First Time Use
-
-On first launch, the program will automatically download the required model files (approximately 2GB). Download location:
-- Windows: `%APPDATA%/ausdata-translator/models/`
-- macOS: `~/Library/Application Support/ausdata-translator/models/`
-- Linux: `~/.config/ausdata-translator/models/`
-Please ensure you have sufficient disk space and network connection.
-
 ## Installation
 
 1. Clone repository
@@ -124,14 +116,6 @@ npm start
 - Python 3.8 或更高版本
 - Node.js 14 或更高版本
 - （可选）NVIDIA GPU 支持 CUDA
-
-## 首次使用
-
-首次启动时，程序会自动下载所需的模型文件（约2GB）。下载位置：
-- Windows: `%APPDATA%/ausdata-translator/models/`
-- macOS: `~/Library/Application Support/ausdata-translator/models/`
-- Linux: `~/.config/ausdata-translator/models/`
-请确保有足够的磁盘空间和网络连接。
 
 ## 安装步骤
 
