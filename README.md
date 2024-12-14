@@ -138,7 +138,7 @@ npm start
 1. 克隆仓库
 ```bash
 git clone https://github.com/Ausdatascience/Ausdata_Translator.git
-cd translator_electron
+cd Ausdata_Translator
 ```
 
 2. 安装 Python 依赖
