@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>预览</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            background: white;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            box-sizing: border-box;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .preview-container {
+            width: 210mm;
+            margin: 0 auto;
+            background: white;
+            box-sizing: border-box;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .page {
+            width: 210mm;
+            padding: 20mm;
+            background: white;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            min-height: 0;
+            max-height: 297mm;
+        }
+
+        .preview-container.multi-page {
+            overflow-y: auto;
+        }
+
+        .preview-container.multi-page .page {
+            min-height: 297mm;
+            margin-bottom: 20px;
+        }
+
+        .preview-container.multi-page .page:last-child {
+            margin-bottom: 0;
+        }
+
+        #previewContent {
+            white-space: pre-wrap;
+            line-height: 1.6;
+            font-size: 12pt;
+            flex: 1;
+        }
+
+        .toolbar {
+            position: fixed;
+            top: 20px;
+            right: 40px;
+            padding: 8px;
+            display: flex;
+            gap: 8px;
+            background: rgba(255,255,255,0.9);
+            border-radius: 6px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            z-index: 1000;
+        }
+
+        .toolbar button {
+            padding: 6px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 13px;
+        }
+
+        .toolbar button:hover {
+            background: #f0f0f0;
+            border-color: #999;
+        }
+
+        .save-toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 10px 20px;
+            border-radius: 4px;
+            color: white;
+            font-size: 14px;
+            z-index: 1000;
+            animation: fadeInOut 2s ease;
+        }
+
+        @keyframes fadeInOut {
+            0% { opacity: 0; transform: translate(-50%, 20px); }
+            15% { opacity: 1; transform: translate(-50%, 0); }
+            85% { opacity: 1; transform: translate(-50%, 0); }
+            100% { opacity: 0; transform: translate(-50%, -20px); }
+        }
+
+        @media print {
+            body {
+                padding: 0;
+                border: none;
+                background: white;
+            }
+            
+            .toolbar {
+                display: none !important;
+            }
+            
+            .preview-container {
+                margin: 0;
+                box-shadow: none;
+                background: white;
+            }
+
+            .page {
+                margin: 0;
+                padding: 20mm;
+                box-shadow: none;
+                background: white;
+            }
+
+            .page:last-child {
+                margin-bottom: 0;
+                page-break-after: avoid;
+                background: white;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="toolbar">
+        <button id="savePDF">保存为PDF</button>
+        <button id="saveWord">保存为Word</button>
+        <button id="closeWindow">关闭</button>
+    </div>
+    <div class="preview-container" id="previewContainer">
+        <!-- 页面将由 JavaScript 动态生成 -->
+    </div>
+    <script src="js/preview.js"></script>
+</body>
+</html> 

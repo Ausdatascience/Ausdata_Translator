@@ -1,0 +1,16 @@
+appId: com.yourdomain.translator
+productName: Smart Translator
+directories:
+  output: dist
+  buildResources: build
+files:
+  - "**/*"
+  - "!**/node_modules/*/{CHANGELOG.md,README.md,README,readme.md,readme}"
+  - "!**/node_modules/*/{test,__tests__,tests,powered-test,example,examples}"
+extraResources:
+  - from: "python"
+    to: "python"
+  - from: "models"
+    to: "models"
+  - from: "scripts"
+    to: "scripts" 
