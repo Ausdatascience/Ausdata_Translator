@@ -117,6 +117,13 @@ npm start
 - Node.js 14 或更高版本
 - （可选）NVIDIA GPU 支持 CUDA
 
+## 首次使用
+
+首次启动时，程序会自动下载所需的模型文件（约2GB）。下载位置：
+- Windows: `%APPDATA%/ausdata-translator/models/`
+- macOS: `~/Library/Application Support/ausdata-translator/models/`
+- Linux: `~/.config/ausdata-translator/models/`
+
 ## 安装步骤
 
 1. 克隆仓库
