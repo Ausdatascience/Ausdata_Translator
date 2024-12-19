@@ -24,13 +24,14 @@ class TranslationService:
             "zh": "zho_Hans",  # 简体中文
             "en": "eng_Latn",  # 英语
             "ja": "jpn_Jpan",  # 日语
-            "auto": "eng_Latn"  # 默认使用英语作为源语言
+            "auto": "eng_Latn"  # 自动检测
         }
         
         print(json.dumps({"status": "Ready"}))
         sys.stdout.flush()
         
         self.is_cancelled = False  # 添加取消标志
+        self.translated_paragraphs = []
 
     def set_device(self):
         """设置设备并返回设备信息"""
@@ -62,7 +63,7 @@ class TranslationService:
         else:  # auto
             if torch.cuda.is_available():
                 self.device = torch.device("cuda")
-                # 自动模式下的适中优化设置
+                # 自动��式下的适中优化设置
                 torch.backends.cudnn.enabled = True
                 torch.backends.cudnn.benchmark = False
                 torch.backends.cudnn.deterministic = True
@@ -97,11 +98,10 @@ class TranslationService:
             self.is_cancelled = False  # 重置取消标志
             print(f"Translation started: {text} from {source_lang} to {target_lang}", file=sys.stderr)
             
-            # 预处理文本：保留��结构
+            # 支持按段落翻译
             paragraphs = text.split('\n')
-            translated_paragraphs = []
             
-            # 如果是自动检测语言，先检测第一段的语言
+            # 自动语言检测
             if source_lang == "auto":
                 first_text = next((p for p in paragraphs if p.strip()), "")
                 has_chinese = any('\u4e00' <= char <= '\u9fff' for char in first_text)
@@ -120,7 +120,7 @@ class TranslationService:
                     print(json.dumps({
                         "status": "cancelled",
                         "message": "翻译已取消",
-                        "translation": "\n".join(translated_paragraphs),  # 返回已翻译的部分
+                        "translation": "\n".join(self.translated_paragraphs),  # 返回已翻译的部分
                         "progress": {
                             "current": i,
                             "total": len(paragraphs),
@@ -131,8 +131,8 @@ class TranslationService:
                     return None
                     
                 if not paragraph.strip():
-                    translated_paragraphs.append("")
-                    self._send_partial_result(translated_paragraphs, i + 1, len(paragraphs))
+                    self.translated_paragraphs.append("")
+                    self._send_partial_result(self.translated_paragraphs, i + 1, len(paragraphs))
                     continue
                     
                 try:
@@ -152,7 +152,7 @@ class TranslationService:
                     
                     # 生成翻译
                     generation_config = {
-                        "do_sample": True,  # 改为 True 以启用采样模��
+                        "do_sample": True,  # 改为 True 以启用采样模式
                         "temperature": 0.6,  # 保持温度参数不变
                         "max_length": 1024,
                         "num_beams": 1,
@@ -178,16 +178,16 @@ class TranslationService:
                     
                     # 解码翻译结果
                     translation = self.tokenizer.batch_decode(translated_tokens, skip_special_tokens=True)[0]
-                    translated_paragraphs.append(translation)
+                    self.translated_paragraphs.append(translation)
                     
                     # 发送部分翻译结果
-                    self._send_partial_result(translated_paragraphs, i + 1, len(paragraphs))
+                    self._send_partial_result(self.translated_paragraphs, i + 1, len(paragraphs))
                     
                 except Exception as e:
                     if self.is_cancelled:
                         break
                     print(f"Error translating paragraph {i}: {str(e)}", file=sys.stderr)
-                    translated_paragraphs.append(f"[翻译错误: {str(e)}]")
+                    self.translated_paragraphs.append(f"[翻译错误: {str(e)}]")
                 
                 # 再次检查是否被取消
                 if self.is_cancelled:
@@ -197,18 +197,18 @@ class TranslationService:
                 print(json.dumps({
                     "status": "cancelled",
                     "message": "翻译已取消",
-                    "translation": "\n".join(translated_paragraphs),
+                    "translation": "\n".join(self.translated_paragraphs),
                     "progress": {
-                        "current": len(translated_paragraphs),
+                        "current": len(self.translated_paragraphs),
                         "total": len(paragraphs),
-                        "percentage": round(len(translated_paragraphs) / len(paragraphs) * 100, 1)
+                        "percentage": round(len(self.translated_paragraphs) / len(paragraphs) * 100, 1)
                     }
                 }, ensure_ascii=False))
                 sys.stdout.flush()
                 return None
             
             # 合并最终翻译结果
-            final_translation = '\n'.join(translated_paragraphs)
+            final_translation = '\n'.join(self.translated_paragraphs)
             
             return {
                 "status": "success",

@@ -13,4 +13,5 @@ extraResources:
   - from: "models"
     to: "models"
   - from: "scripts"
-    to: "scripts" 
+    to: "scripts"
+icon: build/icon.png  # 应用程序图标
